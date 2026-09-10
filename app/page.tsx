@@ -76,9 +76,6 @@ export default function Home() {
   const turn = useCallback((direction: Direction) => {
     if (turning || (direction === "next" && page === PAGES.length - 1) || (direction === "previous" && page === 0)) return;
     setTurning(direction);
-    // The new page stays below the turning sheet and is only committed at its end.
-    window.setTimeout(() => { setPage((current) => current + (direction === "next" ? 1 : -1)); }, 700);
-    window.setTimeout(() => setTurning(null), 730);
   }, [page, turning]);
 
   useEffect(() => {
@@ -91,6 +88,10 @@ export default function Home() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, turn]);
+
+  useEffect(() => {
+    PAGES.forEach((src) => { const image = new Image(); image.src = src; });
+  }, []);
 
   const touchEnd = (event: React.TouchEvent) => {
     if (touchStart.current === null) return;
@@ -111,7 +112,10 @@ export default function Home() {
           <div className={`book ${turning ? `is-turning turn-${turning}` : ""}`}>
             <div className="paper paper-back"><img src={PAGES[turning === "next" ? Math.min(page + 1, 4) : Math.max(page - 1, 0)]} alt="" /></div>
             <div className="paper paper-current"><img src={PAGES[page]} alt={`Book page ${page + 1}`} /></div>
-            {turning && <div className="turning-sheet"><img src={PAGES[page]} alt="" /></div>}
+            {turning && <div className="turning-sheet" onAnimationEnd={() => {
+              setPage((current) => current + (turning === "next" ? 1 : -1));
+              setTurning(null);
+            }}><img src={PAGES[page]} alt="" /></div>}
             <div className="spine" />
           </div>
           <button className="tap-zone left" onClick={() => turn("previous")} aria-label="Previous page" />
