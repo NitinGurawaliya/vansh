@@ -15,7 +15,7 @@ A fully local responsive Next.js letter-book. The five original images are kept 
 1. Run `npm run build`.
 2. Upload the contents of the generated `out/` folder to any static-hosting provider.
 
-No external images, API calls, remote fonts, or audio files are used. The gentle looping music is generated locally in the browser after the book is opened.
+No external images, API calls, remote fonts, or audio files are used. The bundled song plays locally after the book is opened, looping from 0:16 to 2:04.
 
 ## Change cover words
 
