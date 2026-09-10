@@ -76,8 +76,9 @@ export default function Home() {
   const turn = useCallback((direction: Direction) => {
     if (turning || (direction === "next" && page === PAGES.length - 1) || (direction === "previous" && page === 0)) return;
     setTurning(direction);
-    window.setTimeout(() => { setPage((current) => current + (direction === "next" ? 1 : -1)); }, 360);
-    window.setTimeout(() => setTurning(null), 720);
+    // The new page stays below the turning sheet and is only committed at its end.
+    window.setTimeout(() => { setPage((current) => current + (direction === "next" ? 1 : -1)); }, 700);
+    window.setTimeout(() => setTurning(null), 730);
   }, [page, turning]);
 
   useEffect(() => {
